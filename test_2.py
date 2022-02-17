@@ -46,24 +46,33 @@ while True:
         coordinates.append([dictionary])
         #print(coordinates)
 
-    print("___________________________________________________________________________________________________________")
+    #print("___________________________________________________________________________________________________________")
     coordinates = np.array(coordinates, dtype=np.float32)
-    imgpoints.append(coordinates)
-    objpoints.append(objp)
+    if len(coordinates) != 0:
+
+        print("len coordinates --> ", len(coordinates))
+
+        objp = np.zeros((1, len(coordinates)*len(coordinates), 3), np.float32)
+        objp[0, :, :2] = np.mgrid[0:len(coordinates), 0:len(coordinates)].T.reshape(-1, 2)
+
+        objpoints.append(objp)
+
+        coordinates = np.concatenate((coordinates, coordinates))
+        imgpoints.append(coordinates)
+
     if cv2.waitKey(1) == ord('q'):
             break
 
     cv2.waitKey(1)
 
-print(np.asarray(imgpoints))
+print(imgpoints)
 print("img point shape: ", len(np.asarray(imgpoints)))
 print("obj point shape: ", len(objpoints))
-
 print(objpoints)
 
 while True:
     _, img = cap.read()
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, np.asarray(imgpoints), img.shape[::-1], None, None)
+    ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, img.shape[::-1], None, None)
     print(ret)
 
