@@ -43,10 +43,10 @@ while True:
 
     for g in good:
         dictionary = [int(kp_query[g[0].queryIdx].pt[0]), int(kp_query[g[0].queryIdx].pt[1])]
-        coordinates.append(dictionary)
+        coordinates.append([dictionary])
         #print(coordinates)
 
-    print("eskere")
+    print("___________________________________________________________________________________________________________")
     coordinates = np.array(coordinates, dtype=np.float32)
     imgpoints.append(coordinates)
     objpoints.append(objp)
@@ -56,8 +56,8 @@ while True:
     cv2.waitKey(1)
 
 print(np.asarray(imgpoints))
-print("img point shape: %d", len(np.asarray(imgpoints)[0]))
-print("obj point shape: %d", len(objpoints))
+print("img point shape: ", len(np.asarray(imgpoints)))
+print("obj point shape: ", len(objpoints))
 
 print(objpoints)
 

@@ -34,7 +34,7 @@ for fname in images:
 cv2.destroyAllWindows()
 
 print(objpoints)
-print("eskere")
+print("eskere", len(objpoints), len(imgpoints))
 print(imgpoints)
 
 ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1], None, None)
