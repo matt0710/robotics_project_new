@@ -40,11 +40,11 @@ while True:
     cv2.imshow("matches", img_matches)
 
     coordinates = []
-
-    for g in good:
-        dictionary = [int(kp_query[g[0].queryIdx].pt[0]), int(kp_query[g[0].queryIdx].pt[1])]
-        coordinates.append([dictionary])
-        #print(coordinates)
+    if len(good) != 0:
+        for g in good:
+            dictionary = [int(kp_query[g[0].queryIdx].pt[0]), int(kp_query[g[0].queryIdx].pt[1])]
+            coordinates.append([dictionary])
+            #print(coordinates)
 
     #print("___________________________________________________________________________________________________________")
     coordinates = np.array(coordinates, dtype=np.float32)
@@ -57,7 +57,13 @@ while True:
 
         objpoints.append(objp)
 
-        coordinates = np.concatenate((coordinates, coordinates))
+        print("len objp --> ", len(objp[0]))
+        #print("objp", objp)
+
+
+
+        coordinates = [coordinates for _ in range(len(coordinates))]#np.vstack(coordinates*len(coordinates))
+        #print("coord", coordinates)
         imgpoints.append(coordinates)
 
     if cv2.waitKey(1) == ord('q'):
@@ -65,7 +71,7 @@ while True:
 
     cv2.waitKey(1)
 
-print(imgpoints)
+print(imgpoints[0])
 print("img point shape: ", len(np.asarray(imgpoints)))
 print("obj point shape: ", len(objpoints))
 print(objpoints)
@@ -73,6 +79,6 @@ print(objpoints)
 while True:
     _, img = cap.read()
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, img.shape[::-1], None, None)
+    ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints[0], img.shape[::-1], None, None)
     print(ret)
 
